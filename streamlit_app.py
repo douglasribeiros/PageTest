@@ -6,8 +6,6 @@ st.set_page_config(page_title="App de Notificações - Login", layout="centered"
 # 2. CSS Avançado (Injeção de Estilo no Contêiner Nativo)
 st.markdown("""
     <style>
-   /* Esconder Header e Footer */
-    header, footer, #MainMenu {visibility: hidden;}
 
     /* ESTILO DO CARD (Aplicado ao container que contém a classe login-card) */
     [data-testid="stVerticalBlock"]:has(div.login-card) {
