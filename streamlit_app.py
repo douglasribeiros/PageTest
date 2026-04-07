@@ -52,4 +52,17 @@ if not st.session_state.logged_in:
     # Criando a caixa centralizada
     with st.container():
         st.markdown('<div class="login-container">', unsafe_allow_html=True)
-        st.title("🔒 Login
+        st.title("🔒 Login")
+        
+        st.text_input("Usuário", key="user")
+        st.text_input("Senha", type="password", key="password")
+        
+        st.button("Entrar", on_click=check_login)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+else:
+    # O que aparece após o login
+    st.sidebar.button("Sair", on_click=lambda: st.session_state.update(logged_in=False))
+    st.title("🏛️ Bem-vindo ao Sistema")
+    st.write("Você está logado como Administrador.")
+    st.info("Painel de Gestão Contratual Ativo.")
