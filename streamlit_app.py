@@ -76,4 +76,48 @@ if 'auth' not in st.session_state:
     st.session_state.auth = False
 
 def login():
-    if st.session_state.usr == "admin" and st.session
+    if st.session_state.usr == "admin" and st.session_state.pwd == "1234":
+        st.session_state.auth = True
+    else:
+        st.error("Usuário ou senha incorretos")
+
+def reset():
+    st.session_state.usr = ""
+    st.session_state.pwd = ""
+
+# --- TELA DE LOGIN ---
+if not st.session_state.auth:
+    # Espaçador superior
+    st.markdown("<div style='height: 15vh;'></div>", unsafe_allow_html=True)
+
+    # CRIANDO O CONTEINER ÚNICO
+    # Usamos o st.container para agrupar tudo visualmente
+    with st.container():
+        # A classe login-card serve como 'âncora' para o nosso CSS lá de cima
+        st.markdown('<div class="login-card"></div>', unsafe_allow_html=True)
+        
+        st.markdown('<div class="title-text">App de Notificações</div>', unsafe_allow_html=True)
+        
+        st.text_input("Usuário", key="usr", placeholder="Digite seu usuário")
+        st.text_input("Senha", type="password", key="pwd", placeholder="••••")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.button("LOGAR", on_click=login, use_container_width=True)
+        with col2:
+            # Envolvemos este botão em uma div específica para mudar a cor via CSS
+            st.markdown('<div class="limpar-btn">', unsafe_allow_html=True)
+            st.button("LIMPAR", on_click=reset, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+
+# --- TELA PÓS LOGIN ---
+else:
+    st.sidebar.success("Conectado")
+    if st.sidebar.button("Logout"):
+        st.session_state.auth = False
+        st.rerun()
+    
+    st.title("🚀 Dashboard Principal")
+    st.write("Bem-vindo ao sistema de notificações.")
