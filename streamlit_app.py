@@ -116,4 +116,4 @@ if not st.session_state.auth:
 
 else:
     st.sidebar.success("Conectado")
-    st.switch_page("pages/Menu_Principal.py")
+    st.switch_page("pages/Menu_Principal")
