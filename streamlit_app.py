@@ -1,55 +1,63 @@
 import streamlit as st
 
-st.set_page_config(page_title="Sistema de Gestão", layout="wide")
+st.set_page_config(page_title="Sistema de Gestão - Dark Mode", layout="wide")
 
-# CSS para manter sua cor padrão 007e7a e ajustar o menu lateral
+# CSS para forçar o Modo Escuro e manter sua cor padrão 007e7a
 st.markdown("""
     <style>
-    .stApp { background-color: #ffffff; }
-    /* Estiliza o container da sidebar */
+    /* Fundo da aplicação principal */
+    .stApp { 
+        background-color: #0e1117; 
+        color: #ffffff;
+    }
+
+    /* Estiliza o container da sidebar (barra lateral) */
     [data-testid="stSidebar"] {
         background-color: #007e7a;
     }
-    /* Estiliza os textos e widgets dentro da sidebar */
-    [data-testid="stSidebar"] .stMarkdown, [data-testid="stSidebar"] label, [data-testid="stSidebar"] p {
+
+    /* Garante que os textos da sidebar sejam brancos */
+    [data-testid="stSidebar"] .stMarkdown, 
+    [data-testid="stSidebar"] label, 
+    [data-testid="stSidebar"] p,
+    [data-testid="stSidebar"] span {
         color: white !important;
     }
-    /* Estiliza o selectbox dentro da sidebar */
-    div[data-baseweb="select"] > div {
-        background-color: white;
-        color: #007e7a;
+
+    /* Ajusta os inputs e caixas de texto para o modo escuro */
+    .stTextInput>div>div>input {
+        background-color: #262730;
+        color: white;
+    }
+    
+    /* Estilização de títulos */
+    h1, h2, h3 {
+        color: #ffffff !important;
+    }
+
+    /* Cor de fundo para mensagens de info/sucesso se necessário */
+    .stAlert {
+        background-color: #262730;
+        color: white;
     }
     </style>
     """, unsafe_allow_html=True)
 
 # --- MENU LATERAL ---
-st.sidebar.image("https://via.placeholder.com/150x50?text=LOGOTIPO", use_container_width=True) # Espaço para seu logo
 st.sidebar.title("Navegação")
-
-# Opções do menu
 paginas = ["🏠 Início", "📊 Painel do Fiscal", "👥 Equipe de Gestão", "📋 Contratos"]
 escolha = st.sidebar.radio("Selecione a página:", paginas)
 
 st.sidebar.markdown("---")
 st.sidebar.write("Usuário: **Rafael Santos**")
-st.sidebar.write("Perfil: **Coordenador**")
 
-# --- LÓGICA DE NAVEGAÇÃO ---
+# --- CONTEÚDO PRINCIPAL ---
 if escolha == "🏠 Início":
     st.title("🏛️ Portal de Gestão Contratual")
-    st.write("Bem-vindo ao sistema. Utilize o menu ao lado para navegar entre as funcionalidades.")
-    st.info("Selecione uma das opções na barra lateral para começar a fiscalização.")
+    st.write("Bem-vindo ao sistema em modo escuro.")
+    st.info("O layout foi ajustado para reduzir o cansaço visual.")
 
-elif escolha == "📊 Painel do Fiscal":
-    st.title("📊 Painel do Fiscal ou Gestor")
-    st.write("Aqui você visualiza seus indicadores de desempenho.")
-    # Adicione aqui o conteúdo do Dashboard
-
-elif escolha == "👥 Equipe de Gestão":
-    st.title("👥 Equipe de Gestão Contratual")
-    st.write("Gerenciamento de membros e carga de trabalho.")
-    # Adicione aqui o conteúdo da Equipe que criamos anteriormente
-
-elif escolha == "📋 Contratos":
-    st.title("📋 Gestão de Contratos")
-    st.write("Lista completa de contratos ativos e notificações.")
+# Exemplo de conteúdo para visualizar o contraste
+col1, col2 = st.columns(2)
+with col1:
+    st.metric(label="Contratos Ativos", value="245", delta="5%")
