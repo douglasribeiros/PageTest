@@ -80,8 +80,6 @@ def reset():
 
 # --- TELA DE LOGIN ---
 if not st.session_state.auth:
-    # Espaçador superior
-    st.markdown("<div style='height: 15vh;'></div>", unsafe_allow_html=True)
 
     # CRIANDO O CONTEINER ÚNICO
     # Usamos o st.container para agrupar tudo visualmente
