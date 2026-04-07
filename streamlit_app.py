@@ -1,80 +1,91 @@
 import streamlit as st
 
-# Configuração da página (deve ser a primeira linha)
-st.set_page_config(page_title="Gestão Contratual", layout="wide", initial_sidebar_state="expanded")
+# 1. Configuração da Página
+st.set_page_config(page_title="Sistema de Gestão Contratual", layout="wide")
 
-# CSS para forçar o Modo Escuro e fixar o estilo da Sidebar
+# 2. CSS Customizado para Login e Tema Escuro
 st.markdown("""
     <style>
-    /* Fundo principal escuro */
-    .stApp {
-        background-color: #0e1117;
-        color: #ffffff;
-    }
-
-    /* Estilização da Sidebar Fixa */
-    [data-testid="stSidebar"] {
-        background-color: #007e7a;
-        min-width: 250px;
-        max-width: 300px;
-    }
-
-    /* Cor dos textos na Sidebar */
-    [data-testid="stSidebar"] section[data-testid="stSidebarNav"] span,
-    [data-testid="stSidebar"] .stMarkdown, 
-    [data-testid="stSidebar"] label, 
-    [data-testid="stSidebar"] p {
-        color: white !important;
-        font-weight: 500;
-    }
-
-    /* Estilo dos Radio Buttons na Sidebar */
-    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] {
-        gap: 10px;
-    }
-    
-    /* Títulos da página principal */
-    h1, h2, h3 {
-        color: #ffffff !important;
+    .stApp { background-color: #0e1117; color: white; }
+    [data-testid="stSidebar"] { background-color: #007e7a; }
+    .login-box {
+        max-width: 400px;
+        padding: 2rem;
+        border-radius: 10px;
+        background-color: #1e2129;
+        margin: auto;
+        border: 1px solid #007e7a;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- CONTEÚDO DA SIDEBAR (FIXA) ---
-with st.sidebar:
-    st.image("https://via.placeholder.com/200x80/007e7a/ffffff?text=GESTÃO+PÚBLICA", use_container_width=True)
-    st.title("Menu Principal")
-    
-    # Navegação por botões de rádio
-    paginas = ["🏠 Home", "📊 Dashboard Fiscal", "👥 Equipe de Gestão", "📜 Lista de Contratos"]
-    escolha = st.radio("Navegar para:", paginas)
-    
-    st.markdown("---")
-    st.write("👤 **Usuário:** Rafael Santos")
-    st.write("🆔 **Perfil:** Gestor Master")
-    
-    if st.button("Sair / Logout"):
-        st.toast("Sessão encerrada (Simulação)")
+# 3. Gerenciamento de Autenticação
+if 'autenticado' not in st.session_state:
+    st.session_state['autenticado'] = False
 
-# --- LÓGICA DE EXIBIÇÃO DAS TELAS ---
-if escolha == "🏠 Home":
-    st.title("🏛️ Portal de Gestão Contratual")
-    st.subheader("Bem-vindo ao sistema de monitoramento.")
-    st.info("Utilize a barra lateral à esquerda para acessar os módulos. Ela permanecerá fixa durante sua navegação.")
+def realizar_login(usuario, senha):
+    if usuario == "admin" and senha == "1234":
+        st.session_state['autenticado'] = True
+        st.success("Login realizado com sucesso!")
+        st.rerun() # Recarrega a página para entrar no sistema
+    else:
+        st.error("Usuário ou senha incorretos.")
+
+def realizar_logout():
+    st.session_state['autenticado'] = False
+    st.rerun()
+
+# --- TELA DE LOGIN ---
+if not st.session_state['autenticado']:
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 2, 1])
     
-    # Exemplo de conteúdo longo para testar a rolagem
-    st.write("### Resumo de Atividades")
-    for i in range(10):
-        st.write(f"Linha de log de atividade {i+1}: Contrato X atualizado.")
+    with col2:
+        st.markdown('<div class="login-box">', unsafe_allow_html=True)
+        st.title("🔐 Acesso ao Sistema")
+        st.subheader("Gestão Contratual")
+        
+        usuario_input = st.text_input("Usuário")
+        senha_input = st.text_input("Senha", type="password")
+        
+        if st.button("Entrar", use_container_width=True):
+            realizar_login(usuario_input, senha_input)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-elif escolha == "📊 Dashboard Fiscal":
-    st.title("📊 Dashboard do Fiscal")
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Contratos", "128", "+2")
-    col2.metric("Alertas", "14", "-5")
-    col3.metric("Vencimentos", "7", "Próximos 30 dias")
+# --- TELA INTERNA (APÓS LOGIN) ---
+else:
+    # Menu Lateral Fixo
+    with st.sidebar:
+        st.header("🏢 GESTÃO ATIVA")
+        st.markdown(f"👤 **Bem-vindo, { 'Administrador' }**")
+        st.markdown("---")
+        
+        menu = st.radio("Navegação", ["🏠 Home", "📊 Dashboard", "👥 Equipe", "📋 Contratos"])
+        
+        st.markdown("---")
+        if st.button("🚪 Sair do Sistema"):
+            realizar_logout()
 
-elif escolha == "👥 Equipe de Gestão":
-    st.title("👥 Equipe de Gestão")
-    st.write("Visualize os membros da equipe e suas cargas de trabalho.")
-    # Inserir aqui a tabela que criamos anteriormente
+    # Conteúdo das Páginas
+    if menu == "🏠 Home":
+        st.title("🏛️ Painel Principal")
+        st.write("Bem-vindo ao Portal de Gestão Contratual.")
+        st.info("Utilize o menu lateral para gerenciar as notificações e fiscais.")
+        
+        # Exemplo de Cards
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Contratos Ativos", "142")
+        c2.metric("Notificações Hoje", "12")
+        c3.metric("Fiscais Online", "5")
+
+    elif menu == "📊 Dashboard":
+        st.title("📊 Indicadores de Desempenho")
+        st.bar_chart({"Contratos": [10, 25, 15, 30], "Meses": ["Jan", "Fev", "Mar", "Abr"]})
+
+    elif menu == "👥 Equipe":
+        st.title("👥 Gestão da Equipe")
+        st.write("Membros ativos no sistema de fiscalização.")
+
+    elif menu == "📋 Contratos":
+        st.title("📋 Lista de Contratos")
+        st.write("Filtre e visualize detalhes de cada contrato.")
