@@ -116,7 +116,4 @@ if not st.session_state.auth:
 
 else:
     st.sidebar.success("Conectado")
-    if st.sidebar.button("Logout"):
-        st.session_state.auth = False
-        st.rerun()
-    st.title("🚀 Dashboard Principal")
+    st.switch_page("pages/Menu_Principal.py")
