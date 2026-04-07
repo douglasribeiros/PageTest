@@ -3,9 +3,15 @@ import streamlit as st
 # 1. Configuração da Página
 st.set_page_config(page_title="App de Notificações - Login", layout="centered")
 
-# 2. CSS Corrigido para remover o retângulo duplo
+# 2. CSS Ajustado para remover a quebra superior e o retângulo duplo
 st.markdown("""
     <style>
+    /* REMOVE A QUEBRA/ESPAÇO NO TOPO DA TELA */
+    .block-container {
+        padding-top: 0rem !important;
+        padding-bottom: 0rem !important;
+    }
+
     /* Fundo geral da página */
     .stApp {
         background: linear-gradient(135deg, #0e1117 0%, #1a1c23 100%);
@@ -13,8 +19,8 @@ st.markdown("""
 
     header, footer, #MainMenu {visibility: hidden;}
 
-    /* REMOVE ESTILOS DE OUTROS BLOCOS E APLICA APENAS NO CARD DE LOGIN */
-    /* Usamos o seletor de descendente direto para evitar a duplicidade */
+    /* ESTILO DO CARD ÚNICO */
+    /* Seletor específico para evitar o retângulo duplo de fora */
     [data-testid="stVerticalBlock"] [data-testid="stVerticalBlock"]:has(div.login-card) {
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(15px);
@@ -22,6 +28,7 @@ st.markdown("""
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        margin-top: 50px; /* Controle a altura do card aqui */
     }
 
     /* Título Centralizado */
@@ -85,7 +92,8 @@ def reset():
 
 # --- TELA DE LOGIN ---
 if not st.session_state.auth:
-    st.markdown("<div style='height: 15vh;'></div>", unsafe_allow_html=True)
+    # Removemos o markdown de 'height: 15vh' para o card subir ao topo
+    # Caso queira um pouco de espaço, use o margin-top no CSS acima.
 
     with st.container():
         # A âncora que define onde o card começa
