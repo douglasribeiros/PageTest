@@ -6,12 +6,7 @@ st.set_page_config(page_title="App de Notificações - Login", layout="centered"
 # 2. CSS Avançado (Injeção de Estilo no Contêiner Nativo)
 st.markdown("""
     <style>
-    /* Fundo Gradiente */
-    .stApp {
-        background: linear-gradient(135deg, #0e1117 0%, #1a1c23 100%);
-    }
-
-    /* Esconder Header e Footer */
+   /* Esconder Header e Footer */
     header, footer, #MainMenu {visibility: hidden;}
 
     /* ESTILO DO CARD (Aplicado ao container que contém a classe login-card) */
